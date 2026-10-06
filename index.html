@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ArthLens — Personal Finance Lab</title>
+<style>
+:root{--bg:#f4f7f7;--card:#fff;--ink:#102027;--muted:#65767d;--line:#dce5e7;--brand:#116b5c;--brand2:#e5f3ef;--red:#a3444d;--amber:#9a6918;--shadow:0 8px 25px #10202710}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Inter,system-ui,-apple-system,Segoe UI,sans-serif}button,input,select{font:inherit}button{cursor:pointer}
+.app{display:flex;min-height:100vh}.side{position:fixed;width:245px;inset:0 auto 0 0;background:#102027;color:#dce7e8;padding:20px 14px}.brand{font-size:21px;font-weight:850;color:white;padding:5px 10px 24px}.brand i{color:#76cbb7;font-style:normal}.nav button{width:100%;border:0;background:transparent;color:#aabdc1;padding:11px;border-radius:9px;text-align:left;margin:2px 0}.nav button.active,.nav button:hover{background:#1c363d;color:white}.side-note{margin:30px 10px;color:#80969b;font-size:11px}.main{margin-left:245px;width:calc(100% - 245px);padding:25px 34px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.market{background:#fff;border:1px solid var(--line);padding:8px 11px;border-radius:9px}.view{display:none}.view.active{display:block}.hero{margin-bottom:18px}.hero h1{margin:6px 0;font-size:29px}.hero p{margin:0;color:var(--muted)}.tag{display:inline-block;background:var(--brand2);color:var(--brand);padding:5px 9px;border-radius:99px;font-size:11px;font-weight:800}
+.grid{display:grid;gap:15px}.g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:repeat(2,1fr)}.card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:17px;box-shadow:var(--shadow)}.label{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}.big{font-size:26px;font-weight:850;margin:5px 0}.good{color:var(--brand)}.warn{color:var(--amber)}.bad{color:var(--red)}
+.section{margin-top:16px}.section h2{font-size:17px;margin:0 0 12px}.formgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.field label{display:block;font-size:11px;color:var(--muted);font-weight:700;margin-bottom:5px}.field input,.field select{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:#fff}.btn{border:0;border-radius:8px;padding:10px 14px;background:var(--brand);color:white;font-weight:750}.btn.secondary{background:#eaf0f1;color:var(--ink)}.btn.danger{background:#f8e9eb;color:var(--red)}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.tablewrap{overflow:auto}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.table th{font-size:11px;color:var(--muted)}.table td input,.table td select{width:100%;padding:7px;border:1px solid var(--line);border-radius:6px}.pill{display:inline-block;padding:4px 8px;border-radius:99px;background:#edf2f3;font-size:11px;font-weight:800}.meter{height:9px;background:#e7edef;border-radius:99px;overflow:hidden}.meter>i{display:block;height:100%;background:var(--brand)}.callout{padding:13px;border-radius:10px;background:#f0f6f4;border:1px solid #d5e7e2}.source{font-size:11px;color:var(--muted)}.foot{font-size:11px;color:#7b8b90;margin:24px 0}.empty{padding:30px;text-align:center;color:var(--muted)}.rec{font-size:23px;font-weight:850}.mini{font-size:12px;color:var(--muted)}.metric-table td:nth-child(1){font-weight:750}.metric-table td:nth-child(4){white-space:normal;min-width:220px}.metric-table td:nth-child(5){white-space:normal;min-width:190px}
+@media(max-width:900px){.side{width:64px}.brand{font-size:0}.brand:after{content:"A";font-size:22px}.nav span,.side-note{display:none}.main{margin-left:64px;width:calc(100% - 64px);padding:18px}.g4,.g3{grid-template-columns:repeat(2,1fr)}.formgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.g4,.g3,.g2,.formgrid{grid-template-columns:1fr}.main{margin-left:55px;width:calc(100% - 55px);padding:12px}.side{width:55px}.top{display:block}.market{margin-top:8px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side"><div class="brand">Arth<i>Lens</i></div><div class="nav">
+<button class="active" onclick="nav('dashboard',this)">◈ <span>Dashboard</span></button>
+<button onclick="nav('profile',this)">♙ <span>Investor profile</span></button>
+<button onclick="nav('goals',this)">◎ <span>Goals</span></button>
+<button onclick="nav('portfolio',this)">▦ <span>Portfolio</span></button>
+<button onclick="nav('company',this)">⌕ <span>Company lab</span></button>
+</div><div class="side-note">LOCAL MODE<br>Your inputs are stored in this browser only. No live financial data is fetched by this prototype.</div></aside>
+<main class="main">
+<div class="top"><div style="color:var(--muted)">ArthLens / <b id="crumb">Dashboard</b></div><div class="market">Market: <b id="marketTop">India</b></div></div>
+
+<section id="dashboard" class="view active">
+<div class="hero"><span class="tag">PERSONAL FINANCE LAB</span><h1>Your financial cockpit</h1><p>Change the inputs and the analysis recalculates instantly.</p></div>
+<div class="grid g4">
+<div class="card"><div class="label">Portfolio value</div><div class="big" id="dValue">₹0</div><div class="mini" id="dGain">Add holdings to calculate</div></div>
+<div class="card"><div class="label">Portfolio risk</div><div class="big" id="dRisk">—</div><div class="mini" id="dRiskText">Based on your profile</div></div>
+<div class="card"><div class="label">Diversification</div><div class="big" id="dDiv">—</div><div class="mini">Concentration-aware score</div></div>
+<div class="card"><div class="label">Goal progress</div><div class="big" id="dGoal">—</div><div class="mini" id="dGoalText">Add a financial goal</div></div>
+</div>
+<div class="grid g2 section">
+<div class="card"><h2>Personalized assessment</h2><div id="assessment" class="callout">Complete your profile and add a portfolio to generate an assessment.</div></div>
+<div class="card"><h2>What to review</h2><div id="attention">No portfolio data yet.</div></div>
+</div>
+<div class="card section"><h2>Allocation</h2><div id="allocation" class="empty">Add holdings to see allocation.</div></div>
+</section>
+
+<section id="profile" class="view"><div class="hero"><span class="tag">1 · INVESTOR</span><h1>Investor profile</h1><p>Suitability starts with the person, not the security.</p></div>
+<div class="card"><div class="formgrid">
+<div class="field"><label>Country / market</label><select id="country"><option>India</option><option>United States</option><option>Global</option></select></div>
+<div class="field"><label>Age</label><input id="age" type="number" value="32"></div>
+<div class="field"><label>Annual income</label><input id="income" type="number" value="3000000"></div>
+<div class="field"><label>Monthly expenses</label><input id="expenses" type="number" value="110000"></div>
+<div class="field"><label>Emergency fund</label><input id="emergency" type="number" value="900000"></div>
+<div class="field"><label>Dependents</label><input id="dependents" type="number" value="0"></div>
+<div class="field"><label>Investment experience</label><select id="experience"><option>Beginner</option><option selected>Intermediate</option><option>Advanced</option></select></div>
+<div class="field"><label>Risk appetite</label><select id="risk"><option>Conservative</option><option selected>Moderate</option><option>Aggressive</option></select></div>
+<div class="field"><label>Primary horizon</label><select id="horizon"><option>0–3 years</option><option>3–7 years</option><option selected>7–10 years</option><option>10+ years</option></select></div>
+</div><div class="row section"><button class="btn" onclick="saveProfile()">Save profile</button><button class="btn secondary" onclick="resetAll()">Reset demo</button><span id="saveMsg" class="mini"></span></div></div></section>
+
+<section id="goals" class="view"><div class="hero"><span class="tag">2 · GOALS</span><h1>Financial goals</h1><p>Goals turn risk and return into something measurable.</p></div>
+<div class="card"><div class="formgrid"><div class="field"><label>Goal name</label><input id="gName" placeholder="e.g. Home"></div><div class="field"><label>Target amount</label><input id="gTarget" type="number" placeholder="4500000"></div><div class="field"><label>Current amount</label><input id="gCurrent" type="number" placeholder="1200000"></div><div class="field"><label>Years</label><input id="gYears" type="number" value="8"></div><div class="field"><label>Priority</label><select id="gPriority"><option>Essential</option><option>Important</option><option>Flexible</option></select></div></div><button class="btn section" onclick="addGoal()">Add goal</button></div>
+<div class="card section tablewrap"><table class="table" id="goalTable"></table></div></section>
+
+<section id="portfolio" class="view"><div class="hero"><span class="tag">3 · PORTFOLIO</span><h1>Holdings</h1><p>Enter your positions manually. Values are calculated in your browser.</p></div>
+<div class="card"><div class="row"><button class="btn" onclick="addHolding()">+ Add holding</button><button class="btn secondary" onclick="downloadTemplate()">CSV template</button><button class="btn secondary" onclick="exportCSV()">Export CSV</button><label class="btn secondary">Import CSV <input id="csv" type="file" accept=".csv" hidden onchange="importCSV(event)"></label></div></div>
+<div class="card section tablewrap"><table class="table" id="holdTable"></table></div></section>
+
+<section id="company" class="view"><div class="hero"><span class="tag">4 · COMPANY LAB</span><h1>Company analysis</h1><p>Manually enter financial metrics to see an explainable research-style assessment.</p></div>
+<div class="card"><div class="formgrid">
+<div class="field"><label>Company</label><input id="cName" value="Example Ltd."></div>
+<div class="field"><label>Revenue growth %</label><input id="revGrowth" type="number" value="12"></div>
+<div class="field"><label>EBITDA margin %</label><input id="ebitda" type="number" value="22"></div>
+<div class="field"><label>Net margin %</label><input id="netMargin" type="number" value="15"></div>
+<div class="field"><label>ROE %</label><input id="roe" type="number" value="24"></div>
+<div class="field"><label>ROCE %</label><input id="roce" type="number" value="20"></div>
+<div class="field"><label>Debt / Equity</label><input id="de" type="number" step=".01" value=".2"></div>
+<div class="field"><label>Interest coverage</label><input id="coverage" type="number" step=".1" value="8"></div>
+<div class="field"><label>Free cash flow (₹ Cr)</label><input id="fcf" type="number" value="1000"></div>
+<div class="field"><label>EPS growth %</label><input id="epsGrowth" type="number" value="14"></div>
+<div class="field"><label>P/E</label><input id="pe" type="number" step=".1" value="24"></div>
+<div class="field"><label>EV / EBITDA</label><input id="ev" type="number" step=".1" value="16"></div>
+<div class="field"><label>P/B</label><input id="pb" type="number" step=".1" value="4"></div>
+<div class="field"><label>PEG</label><input id="peg" type="number" step=".1" value="1.7"></div>
+<div class="field"><label>FCF yield %</label><input id="fcfy" type="number" step=".1" value="4"></div>
+<div class="field"><label>Dividend yield %</label><input id="divy" type="number" step=".1" value="1.8"></div>
+</div><button class="btn section" onclick="analyzeCompany()">Analyze company</button></div>
+<div id="companyOut" class="section"></div></section>
+
+<div class="foot">Educational decision-support prototype only. It is not regulated financial advice, does not guarantee returns, and should not be used as the sole basis for investment decisions. This version does not fetch live market data; manually entered figures may be stale or incorrect. For production use, every metric and conclusion should be linked to dated primary/independent sources.</div>
+</main></div>
+<script>
+const K='arthlens_v2';
+let state=JSON.parse(localStorage.getItem(K)||'null')||{profile:{country:'India',age:32,income:3000000,expenses:110000,emergency:900000,dependents:0,experience:'Intermediate',risk:'Moderate',horizon:'7–10 years'},goals:[],holdings:[]};
+const $=id=>document.getElementById(id);
+const n=id=>Number($(id).value)||0;
+function money(x){return new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0}).format(x||0)}
+function save(){localStorage.setItem(K,JSON.stringify(state));renderAll()}
+function nav(id,b){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('crumb').textContent=b.innerText.trim();window.scrollTo(0,0)}
+function saveProfile(){state.profile={country:$('country').value,age:n('age'),income:n('income'),expenses:n('expenses'),emergency:n('emergency'),dependents:n('dependents'),experience:$('experience').value,risk:$('risk').value,horizon:$('horizon').value};save();$('saveMsg').textContent='Saved locally ✓'}
+function loadProfile(){let p=state.profile;['country','age','income','expenses','emergency','dependents','experience','risk','horizon'].forEach(k=>$(k).value=p[k])}
+function addGoal(){let name=$('gName').value.trim();if(!name)return alert('Enter a goal name');state.goals.push({id:Date.now(),name,target:n('gTarget'),current:n('gCurrent'),years:n('gYears'),priority:$('gPriority').value});$('gName').value='';save()}
+function delGoal(id){state.goals=state.goals.filter(x=>x.id!==id);save()}
+function addHolding(){state.holdings.push({id:Date.now(),name:'New holding',asset:'Equity',sector:'',qty:0,buy:0,price:0});save()}
+function delHolding(id){state.holdings=state.holdings.filter(x=>x.id!==id);save()}
+function editH(id,k,v){let h=state.holdings.find(x=>x.id===id);h[k]=['qty','buy','price'].includes(k)?Number(v)||0:v;save()}
+function totals(){return state.holdings.reduce((a,h)=>{let val=h.qty*h.price,cost=h.qty*h.buy;return {v:a.v+val,c:a.c+cost}}, {v:0,c:0})}
+function riskScore(){let base={Conservative:30,Moderate:55,Aggressive:78}[state.profile.risk]||55;let horizon={'0–3 years':-18,'3–7 years':-6,'7–10 years':5,'10+ years':10}[state.profile.horizon]||0;return Math.max(0,Math.min(100,base+horizon))}
+function divScore(){let hs=state.holdings, total=totals().v;if(!total)return 0;let top=Math.max(...hs.map(h=>h.qty*h.price/total),0);let sectors=new Set(hs.map(h=>h.sector).filter(Boolean)).size;return Math.round(Math.max(0,Math.min(100,92-top*100-(sectors?Math.max(0,5-sectors)*5:18))))}
+function renderDashboard(){let t=totals(), p=state.profile, r=riskScore(), d=divScore();$('dValue').textContent=money(t.v);$('dGain').textContent=t.c?((t.v/t.c-1)*100).toFixed(1)+'% vs cost':'Add buy prices';$('dRisk').textContent=r+'/100';$('dRiskText').textContent=p.risk+' profile · '+p.horizon;$('dDiv').textContent=state.holdings.length?d+'/100':'—';let g=state.goals[0];if(g){let pr=g.target?Math.min(100,g.current/g.target*100):0;$('dGoal').textContent=pr.toFixed(0)+'%';$('dGoalText').textContent=g.name+' · '+g.years+' years'}else{$('dGoal').textContent='—';$('dGoalText').textContent='Add a financial goal'}
+let emergencyMonths=p.expenses?p.emergency/p.expenses:0;let assess=[];if(emergencyMonths<6)assess.push('Emergency reserve is below a 6-month reference point.');if(d&&d<65)assess.push('Portfolio concentration/diversification deserves review.');if(r>75&&p.risk==='Conservative')assess.push('Risk profile and portfolio risk may be mismatched.');if(!assess.length)assess.push('No obvious profile-level red flag in the entered demo data. This is not a guarantee of suitability.');$('assessment').innerHTML='<strong>Personalized read</strong><br>'+assess.join('<br>');$('attention').innerHTML='<ul><li>Review the largest positions and sector overlap.</li><li>Check each holding against your goal horizon.</li><li>Verify every company metric against current primary sources before acting.</li></ul>';
+let alloc={};state.holdings.forEach(h=>{let v=h.qty*h.price;alloc[h.asset]=(alloc[h.asset]||0)+v});$('allocation').innerHTML=Object.keys(alloc).length?Object.entries(alloc).map(([k,v])=>`<div style="margin:9px 0"><b>${k}</b> · ${money(v)} (${(v/t.v*100).toFixed(1)}%)<div class="meter"><i style="width:${Math.min(100,v/t.v*100)}%"></i></div></div>`).join(''):'<div class="empty">Add holdings to see allocation.</div>'}
+function renderGoals(){let rows='<tr><th>Goal</th><th>Target</th><th>Current</th><th>Progress</th><th>Years</th><th>Priority</th><th></th></tr>';state.goals.forEach(g=>{let pr=g.target?Math.min(100,g.current/g.target*100):0;rows+=`<tr><td>${g.name}</td><td>${money(g.target)}</td><td>${money(g.current)}</td><td>${pr.toFixed(0)}%</td><td>${g.years}</td><td>${g.priority}</td><td><button class="btn danger" onclick="delGoal(${g.id})">Delete</button></td></tr>`});$('goalTable').innerHTML=rows+(state.goals.length?'':'<tr><td colspan="7" class="empty">No goals yet.</td></tr>')}
+function renderHoldings(){let rows='<tr><th>Name</th><th>Asset</th><th>Sector</th><th>Qty</th><th>Buy price</th><th>Current price</th><th>Value</th><th></th></tr>';state.holdings.forEach(h=>rows+=`<tr><td><input value="${esc(h.name)}" onchange="editH(${h.id},'name',this.value)"></td><td><select onchange="editH(${h.id},'asset',this.value)"><option ${h.asset==='Equity'?'selected':''}>Equity</option><option ${h.asset==='Debt'?'selected':''}>Debt</option><option ${h.asset==='Gold'?'selected':''}>Gold</option><option ${h.asset==='Cash'?'selected':''}>Cash</option><option ${h.asset==='Fund'?'selected':''}>Fund</option></select></td><td><input value="${esc(h.sector||'')}" onchange="editH(${h.id},'sector',this.value)"></td><td><input type="number" value="${h.qty}" onchange="editH(${h.id},'qty',this.value)"></td><td><input type="number" value="${h.buy}" onchange="editH(${h.id},'buy',this.value)"></td><td><input type="number" value="${h.price}" onchange="editH(${h.id},'price',this.value)"></td><td>${money(h.qty*h.price)}</td><td><button class="btn danger" onclick="delHolding(${h.id})">×</button></td></tr>`);$('holdTable').innerHTML=rows+(state.holdings.length?'':'<tr><td colspan="8" class="empty">No holdings yet. Click “Add holding”.</td></tr>')}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
+function analyzeCompany(){let name=$('cName').value||'Company';let quality=0;quality+=(n('revGrowth')>=10?15:8);quality+=(n('ebitda')>=18?15:8);quality+=(n('roe')>=15?15:8);quality+=(n('roce')>=15?15:8);quality+=(n('de')<=.5?15:7);quality+=(n('coverage')>=5?10:5);quality+=(n('fcf')>0?15:3);let valuation=0;valuation+=(n('pe')<=20?20:n('pe')<=28?12:5);valuation+=(n('ev')<=14?20:n('ev')<=20?12:5);valuation+=(n('peg')<=1.5?20:n('peg')<=2?12:5);valuation+=(n('fcfy')>=5?20:n('fcfy')>=3?12:5);valuation+=(n('pb')<=3?20:n('pb')<=5?12:5);let score=Math.round(quality*.6+valuation*.4);let rec=score>=75?'BUY / ACCUMULATE':score>=58?'HOLD / WATCH':'REDUCE / AVOID';let cls=score>=75?'good':score>=58?'warn':'bad';$('companyOut').innerHTML=`<div class="grid g3"><div class="card"><div class="label">Overall research score</div><div class="big">${score}/100</div><div class="mini">Illustrative rules, not a professional valuation model.</div></div><div class="card"><div class="label">Business quality</div><div class="big">${quality}/100</div><div class="mini">Growth, profitability, returns, leverage and cash flow.</div></div><div class="card"><div class="label">Valuation</div><div class="big">${valuation}/100</div><div class="mini">Relative attractiveness based only on entered metrics.</div></div></div><div class="card section"><div class="label">Prototype conclusion</div><div class="rec ${cls}">${rec}</div><p>This conclusion is deliberately transparent: <b>business quality</b> is separated from <b>price paid</b>. The final production system should replace these rules with sector-aware research, historical valuation, peer analysis and source-backed evidence.</p></div><div class="card section"><h2>Metric interpretation</h2><table class="table metric-table"><tr><th>Metric</th><th>Value</th><th>Signal</th><th>What it indicates</th><th>What it can mean for you</th></tr>${metric('Revenue growth',n('revGrowth')+'%',n('revGrowth')>=10?'Supportive':'Weak','Speed of top-line expansion.','Higher growth may support future earnings, but quality and sustainability matter.')}${metric('ROE',n('roe')+'%',n('roe')>=15?'Strong':'Watch','Return generated on shareholder equity.','A strong ROE can indicate capital efficiency; check leverage and buybacks.')}${metric('ROCE',n('roce')+'%',n('roce')>=15?'Strong':'Watch','Return on operating capital.','Useful for judging business efficiency across capital-intensive companies.')}${metric('Debt / Equity',n('de').toFixed(2),n('de')<=.5?'Low leverage':'Higher leverage','Balance-sheet leverage.','Lower leverage generally gives more resilience, but sector norms matter.')}${metric('Free cash flow',money(n('fcf')),'Positive','Cash left after operating needs and capital expenditure.','Persistent cash generation can strengthen financial quality.')}${metric('P/E',n('pe')+'×',n('pe')<=20?'Lower':n('pe')<=28?'Moderate':'High','Price relative to earnings.','A high multiple means more future growth may already be priced in.')}${metric('EV / EBITDA',n('ev')+'×',n('ev')<=14?'Lower':n('ev')<=20?'Moderate':'High','Enterprise value relative to operating earnings.','Helps compare valuation across companies with different debt levels.')}${metric('PEG',n('peg').toFixed(1),'Contextual','P/E relative to growth.','Useful as a shortcut, but unreliable when growth is volatile or cyclic.')}${metric('FCF yield',n('fcfy')+'%',n('fcfy')>=5?'Attractive':'Watch','Free cash flow relative to market value.','Higher yield can imply more valuation support, subject to FCF quality.')}</table></div><div class="card section"><h2>Research checklist</h2><div class="callout"><b>Before acting:</b> verify the figures against the latest annual/quarterly filings, exchange disclosures, regulator information and at least one independent source. Record source, date and calculation for every material claim.</div></div>`}
+function metric(a,b,c,d,e){return `<tr><td>${a}</td><td>${b}</td><td><span class="pill">${c}</span></td><td>${d}</td><td>${e}</td></tr>`}
+function exportCSV(){let rows=[['Name','Asset','Sector','Quantity','Buy Price','Current Price'],...state.holdings.map(h=>[h.name,h.asset,h.sector,h.qty,h.buy,h.price])];let csv=rows.map(r=>r.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(',')).join('\\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='arthlens-portfolio.csv';a.click()}
+function parseCSV(text){
+  const rows=[]; let row=[], cell='', quoted=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i], next=text[i+1];
+    if(quoted){
+      if(ch==='"' && next==='"'){cell+='"';i++}
+      else if(ch==='"') quoted=false;
+      else cell+=ch;
+    }else{
+      if(ch==='"') quoted=true;
+      else if(ch===','){row.push(cell.trim());cell=''}
+      else if(ch==='\n'){row.push(cell.trim());cell='';if(row.some(v=>v!==''))rows.push(row);row=[]}
+      else if(ch!=='\r') cell+=ch;
+    }
+  }
+  if(cell!=='' || row.length){row.push(cell.trim());if(row.some(v=>v!==''))rows.push(row)}
+  return rows;
+}
+function downloadTemplate(){
+  const csv='Name,Asset,Sector,Quantity,Buy Price,Current Price\nHDFC Bank,Equity,Banking,10,1500,1700\nInfosys,Equity,IT,5,1400,1550\n';
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='arthlens-portfolio-template.csv';a.click();
+}
+function importCSV(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const rows=parseCSV(r.result);
+      if(rows.length<2)throw new Error('The CSV has no data rows.');
+      const header=rows[0].map(x=>x.toLowerCase().replace(/[\s_-]+/g,''));
+      const find=names=>names.map(x=>header.indexOf(x)).find(i=>i>=0);
+      const ix={
+        name:find(['name','holding','security','symbol']),
+        asset:find(['asset','assetclass','type']),
+        sector:find(['sector','industry']),
+        qty:find(['quantity','qty','units']),
+        buy:find(['buyprice','purchaseprice','costprice','averageprice']),
+        price:find(['currentprice','price','ltp','marketprice'])
+      };
+      if(ix.name===undefined)throw new Error('Missing Name/Holding/Security column.');
+      const imported=[];
+      rows.slice(1).forEach((a,i)=>{
+        if(!a.some(v=>v.trim()))return;
+        imported.push({
+          id:Date.now()+i,
+          name:a[ix.name]||'',
+          asset:ix.asset!==undefined?(a[ix.asset]||'Equity'):'Equity',
+          sector:ix.sector!==undefined?(a[ix.sector]||''):'',
+          qty:ix.qty!==undefined?Number(String(a[ix.qty]||'').replace(/,/g,''))||0:0,
+          buy:ix.buy!==undefined?Number(String(a[ix.buy]||'').replace(/[₹$,]/g,''))||0:0,
+          price:ix.price!==undefined?Number(String(a[ix.price]||'').replace(/[₹$,]/g,''))||0:0
+        });
+      });
+      if(!imported.length)throw new Error('No valid holdings were found.');
+      state.holdings=imported;save();alert(`Imported ${imported.length} holding(s) successfully.`);
+    }catch(err){alert('Import failed: '+err.message)}
+    e.target.value='';
+  };
+  r.readAsText(f);
+}
+function resetAll(){if(confirm('Reset all locally saved data?')){localStorage.removeItem(K);location.reload()}}
+function renderAll(){loadProfile();renderDashboard();renderGoals();renderHoldings();$('marketTop').textContent=state.profile.country}
+renderAll();
+</script>
+</body>
+</html>
